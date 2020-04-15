@@ -11,4 +11,6 @@ install -vDm755 src/opportunity.py $DESTDIR/$BINDIR/opportunity
 sed -i "s|data/ui.glade|/$DATADIR/opportunity/ui.glade|g" $DESTDIR/$BINDIR/opportunity
 
 install -vDm755 data/installer.sh -t $DESTDIR/$LIBEXECDIR/opportunity/
-install -vDm644 data/{logo.jpg,ui.glade} -t $DESTDIR/$DATADIR/
+install -vDm644 data/{logo.jpg,ui.glade} -t $DESTDIR/$DATADIR/opportunity
+
+install -vDm755 opportunity.desktop -t $DESTDIR/$DATADIR/applications
