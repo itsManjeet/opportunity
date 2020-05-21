@@ -1,11 +1,11 @@
 #!/bin/sh
 
-set -e
+source /usr/lib/rsb/io.sh
 
-workDir=$(mktemp -d workDir.XXXXXXXXXX)
+workDir=$(mktemp -d /tmp/workDir.XXXXXXXXXX)
 
 function log {
-    echo "$(time): $@"
+    process "$(date): $@"
 }
 
 function check {
@@ -15,16 +15,17 @@ function check {
 }
 
 function exitWithMesg {
-    log "[err: $1] : $2"
+    err "$2"
+    err "INSTALLATION FAILED WITH EXIT CODE - '$1'"
     exit $1
 }
 
-[ -z $MODE ] && exitWithMesg 11 "no method specified"
-[ -z $NAME ] && exitWithMesg 12 "no name specified"
-[ -z $USER ] && exitWithMesg 13 "no user specified"
-[ -z $PASS ] && exitWithMesg 14 "no password specified"
-[ -z $LOCA ] && exitWithMesg 15 "no locale specified"
-[ -z $SQUA ] && exitWithMesg 16 "no squa specified"
+[[ -z $MODE ]] && exitWithMesg 11 "no method specified"
+[[ -z $NAME ]] && exitWithMesg 12 "no name specified"
+[[ -z $USER ]] && exitWithMesg 13 "no user specified"
+[[ -z $PASS ]] && exitWithMesg 14 "no password specified"
+#[[ -z $LOCA ]] && exitWithMesg 15 "no locale specified"
+[[ -z $SQUA ]] && exitWithMesg 16 "no squa specified"
 
 if [[ -d "/sys/firmware/efi/efivars" ]] ; then
     EFI=1
@@ -34,7 +35,8 @@ fi
 ERR_UNKNOWN_MODE=101
 ERR_DISK_NOT_FOUND=201
 ERR_NO_ROOTPART_SPECIFIED=251
-ERR_EFIPART_NOT_AVALIABLE=252
+ERR_NO_ROOTPART_EXIST=252
+ERR_EFIPART_NOT_AVALIABLE=253
 ERR_NO_SQUADIR_EXIST=301
 ERR_NO_SQUA_EXIST=302
 function main {
@@ -47,8 +49,8 @@ function main {
     case $MODE in
         full)
 
-            [ -z $DISK ] && exitWithMesg 10 "no disk specified"
-            
+            [[ -z $DISK ]] && exitWithMesg 10 "no disk specified"
+
             log "perfroming full installation"
             fullInstall
             check $? "error in performing full installation"
@@ -56,8 +58,8 @@ function main {
 
         manual)
 
-            [ -z $ROOTPART ] && exitWithMesg 10 "no disk specified"
-            
+            [[ -z $ROOTPART ]] && exitWithMesg $ERR_NO_ROOTPART_SPECIFIED "no disk specified"
+    	
             log "performing manual installation"
             manualInstall
             check $? "performing manual installation"
@@ -67,6 +69,10 @@ function main {
             check $ERR_UNKNOWN_MODE "unknown mode specified"
             ;;
     esac
+	
+    log "installing system"
+    extractSqua
+    check $? "error while installing system"
 
     log "updating database"
     updateDatabase
@@ -80,14 +86,21 @@ function main {
     setLocale
     check $? "error while setting up locale"
 
-    # log "post configurations"
-    # postConfig
-    # check $? "error while performing post configurations"
 
-    echo "press any key to reboot"
+    log "installing bootloader"
+    installBootloader
+    check $? "error while installing bootloader"
+
+    cleanRoots || true
+    clear
+
+    echo -e "\n\n\n"
+    success Installation Success 
+    echo -e "\n\n\n"
+    notice "press any key to reboot"
     read -r
     log "rebooting"
-
+    /sbin/openrc-shutdown -r now
 }
 
 # function preConfig {
@@ -125,10 +138,12 @@ function fullInstall {
             mkpart primary ext4 100Mib 100%
 
         ROOTPART=${DISK}2
+	mkfs.ext4 -F $ROOTPART
+
         mount $ROOTPART $workDir
 
         install -d $ROOTPART/boot/efi
-
+        mkfs.fat32 -F ${DISK}1
         mount ${DISK}1 $ROOTPART/boot/efi
 
     else
@@ -138,7 +153,7 @@ function fullInstall {
             set 1 boot on
 
         ROOTPART=${DISK}1
-
+	mkfs.ext4 -F $ROOTPART
         mount $ROOTPART $workDir
     fi
 
@@ -147,7 +162,7 @@ function fullInstall {
 function manualInstall {
 
     if [[ ! -e $ROOTPART ]] ; then
-        return $ERR_NO_ROOTPART_SPECIFIED
+        return $ERR_NO_ROOTPART_EXIST
     fi
 
     mkfs.ext4 -F $ROOTPART
@@ -159,9 +174,10 @@ function manualInstall {
             EFIPART=$(lsblk -o path,fstype | grep vfat | awk '{print $1}')
             [[ -z $EFIPART ]] && return $ERR_EFIPART_NOT_AVALIABLE
         fi
-
-        install -d -o root -g root $workDir/boot/efi
-        mount $EFIPART $workDir/boot/efi
+	
+		echo "efi-part: $EFIPART"
+        install -dv -o root -g root $workDir/boot/efi
+        mount $EFIPART $workDir/boot/efi -v
     fi
     
 }
@@ -200,7 +216,7 @@ function updateDatabase {
     execInRoots pwconv         || true
     execInRoots grpconv        || true
     execInRoots sys-usrgrp fix || true                                    
-    execInRoots glib-compile-scheams /usr/share/glib-2.0/scheams || true
+    execInRoots glib-compile-schemas /usr/share/glib-2.0/schemas || true
     execInRoots gdk-pixbuf-query-loaders --update-cache          || true
 
     
@@ -208,10 +224,23 @@ function updateDatabase {
 
 
 function addUser {
-    execInRoots useradd -m -g user -G sudo,wheel,plugdev,adm,netdev $USER -p $(openssl passwd -1 $PASS) -c "$NAME"
+    execInRoots useradd -m -g user -G sudo,wheel,plugdev,adm,netdev $USER -p "$PASS"
 }
 
 function setLocale {
-    execInRoots sys-locale set $LOCA
+    execInRoots sys-locale set ${LOCA:-"en_IN.UTF-8"}
 }
 
+function installBootloader {
+	if [[ $EFI ]] ; then
+		execInRoots grub-install --bootloader-id "releax os" --recheck
+	else
+		if [[ -z $DISK ]] ; then
+			DISK=$(echo $ROOTPART | sed 's|[0-9||g')
+		fi
+		execInRoots grub-install --recheck $DISK
+	fi
+
+	execInRoots grub-mkconfig -o /boot/grub/grub.cfg
+}
+main

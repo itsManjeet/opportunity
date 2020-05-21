@@ -13,4 +13,4 @@ sed -i "s|data/ui.glade|/$DATADIR/opportunity/ui.glade|g" $DESTDIR/$BINDIR/oppor
 install -vDm755 data/installer.sh -t $DESTDIR/$LIBEXECDIR/opportunity/
 install -vDm644 data/{logo.jpg,ui.glade} -t $DESTDIR/$DATADIR/opportunity
 
-install -vDm755 opportunity.desktop -t $DESTDIR/$DATADIR/applications
+install -vDm755 data/opportunity.desktop -t $DESTDIR/$DATADIR/applications
