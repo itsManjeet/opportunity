@@ -2,11 +2,11 @@
 <!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkWindow" id="mainWindow">
+  <object class="GtkWindow" id="main_window">
     <property name="can_focus">False</property>
     <property name="default_width">800</property>
     <property name="default_height">700</property>
-    <signal name="destroy" handler="onDestroy" swapped="no"/>
+    <signal name="destroy" handler="on_destroy" swapped="no"/>
     <child type="titlebar">
       <object class="GtkHeaderBar">
         <property name="visible">True</property>
@@ -17,7 +17,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkStack" id="stack">
+      <object class="GtkStack" id="stack_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_left">50</property>
@@ -36,9 +36,11 @@
               <object class="GtkImage">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
                 <property name="margin_top">10</property>
                 <property name="margin_bottom">10</property>
-                <property name="pixbuf">logo.jpg</property>
+                <property name="pixbuf">logo.png</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -50,6 +52,7 @@
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">center</property>
                 <property name="label" translatable="yes">releax os</property>
                 <attributes>
                   <attribute name="font-desc" value="Open Sans Light, Light 10"/>
@@ -66,6 +69,7 @@
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">center</property>
                 <property name="label" translatable="yes">uhh something new ?</property>
                 <attributes>
                   <attribute name="font-desc" value="Open Sans Light, Light 12"/>
@@ -81,6 +85,7 @@
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">center</property>
                 <property name="margin_left">20</property>
                 <property name="margin_right">20</property>
                 <property name="margin_top">50</property>
@@ -99,7 +104,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="langCombo">
+                  <object class="GtkComboBoxText" id="language_combo">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -125,7 +130,7 @@
                 <property name="valign">center</property>
                 <property name="margin_top">30</property>
                 <property name="margin_bottom">20</property>
-                <signal name="clicked" handler="onStartBtnClick" swapped="no"/>
+                <signal name="clicked" handler="on_start_btn_click" swapped="no"/>
                 <child>
                   <object class="GtkImage">
                     <property name="visible">True</property>
@@ -142,7 +147,7 @@
             </child>
           </object>
           <packing>
-            <property name="name">introPage</property>
+            <property name="name">intro_page</property>
             <property name="title" translatable="yes">Introduction</property>
           </packing>
         </child>
@@ -185,7 +190,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="onDestInstBtnClick" swapped="no"/>
+                    <signal name="clicked" handler="on_destuctive_install_btn_click" swapped="no"/>
                     <child>
                       <object class="GtkBox">
                         <property name="visible">True</property>
@@ -229,7 +234,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="onManInstBtnClick" swapped="no"/>
+                    <signal name="clicked" handler="on_manual_install_btn_click" swapped="no"/>
                     <child>
                       <object class="GtkBox">
                         <property name="visible">True</property>
@@ -314,7 +319,7 @@ you need to manually parition your disk drive and specify the mount points</prop
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="onInstBackBtnClick" swapped="no"/>
+                    <signal name="clicked" handler="on_instype_back_btn_click" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -328,7 +333,7 @@ you need to manually parition your disk drive and specify the mount points</prop
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="onInsHelpBtnClick" swapped="no"/>
+                    <signal name="clicked" handler="on_instype_help_btn_click" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -346,7 +351,7 @@ you need to manually parition your disk drive and specify the mount points</prop
             </child>
           </object>
           <packing>
-            <property name="name">instModePage</property>
+            <property name="name">installation_type</property>
             <property name="title" translatable="yes">Installation Type</property>
             <property name="position">1</property>
           </packing>
@@ -386,7 +391,7 @@ you need to manually parition your disk drive and specify the mount points</prop
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="onMountBackBtnClick" swapped="no"/>
+                    <signal name="clicked" handler="on_mount_back_btn_click" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -413,7 +418,7 @@ you need to manually parition your disk drive and specify the mount points</prop
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="onOpenPartBtnClick" swapped="no"/>
+                    <signal name="clicked" handler="on_mount_open_part_btn_click" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -427,7 +432,7 @@ you need to manually parition your disk drive and specify the mount points</prop
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="onMountNextBtnClick" swapped="no"/>
+                    <signal name="clicked" handler="on_mount_next_btn_click" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -556,7 +561,7 @@ you need to manually parition your disk drive and specify the mount points</prop
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="efiCombo">
+                  <object class="GtkComboBoxText" id="efi_combo">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -566,7 +571,7 @@ you need to manually parition your disk drive and specify the mount points</prop
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="rootCombo">
+                  <object class="GtkComboBoxText" id="root_combo">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -576,7 +581,7 @@ you need to manually parition your disk drive and specify the mount points</prop
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="homeCombo">
+                  <object class="GtkComboBoxText" id="home_combo">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -586,7 +591,7 @@ you need to manually parition your disk drive and specify the mount points</prop
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="varCombo">
+                  <object class="GtkComboBoxText" id="var_combo">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -604,7 +609,7 @@ you need to manually parition your disk drive and specify the mount points</prop
             </child>
           </object>
           <packing>
-            <property name="name">mountPage</property>
+            <property name="name">mount_page</property>
             <property name="title" translatable="yes">Mount Point</property>
             <property name="position">2</property>
           </packing>
@@ -644,7 +649,7 @@ you need to manually parition your disk drive and specify the mount points</prop
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="onUserBackBtnClick" swapped="no"/>
+                    <signal name="clicked" handler="on_user_back_btn_click" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -658,7 +663,7 @@ you need to manually parition your disk drive and specify the mount points</prop
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="onUserNextBtnClick" swapped="no"/>
+                    <signal name="clicked" handler="on_user_next_btn_click" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -687,7 +692,7 @@ you need to manually parition your disk drive and specify the mount points</prop
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Name:</property>
+                    <property name="label" translatable="yes">User Name:</property>
                     <attributes>
                       <attribute name="font-desc" value="Open Sans 12"/>
                     </attributes>
@@ -698,18 +703,15 @@ you need to manually parition your disk drive and specify the mount points</prop
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkEntry" id="user_entry">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">User Name:</property>
-                    <attributes>
-                      <attribute name="font-desc" value="Open Sans 12"/>
-                    </attributes>
+                    <property name="can_focus">True</property>
+                    <property name="input_purpose">alpha</property>
+                    <signal name="changed" handler="on_user_entry_changed" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
                   </packing>
                 </child>
                 <child>
@@ -724,7 +726,20 @@ you need to manually parition your disk drive and specify the mount points</prop
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="pass_entry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="visibility">False</property>
+                    <property name="invisible_char">*</property>
+                    <signal name="changed" handler="on_pass_entry_changed" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
@@ -739,36 +754,16 @@ you need to manually parition your disk drive and specify the mount points</prop
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">3</property>
+                    <property name="top_attach">2</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="nameEntry">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="usernameEntry">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <signal name="changed" handler="onUsrNameEntryChanged" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="passwdEntry">
+                  <object class="GtkEntry" id="r_pass_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="visibility">False</property>
                     <property name="invisible_char">*</property>
+                    <signal name="changed" handler="on_r_pass_entry_changed" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -776,20 +771,7 @@ you need to manually parition your disk drive and specify the mount points</prop
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="rpaswdEntry">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="visibility">False</property>
-                    <property name="invisible_char">*</property>
-                    <signal name="changed" handler="onRPasswdEntryChanged" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="usrErrLbl">
+                  <object class="GtkLabel" id="user_error_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <attributes>
@@ -798,7 +780,7 @@ you need to manually parition your disk drive and specify the mount points</prop
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">4</property>
+                    <property name="top_attach">3</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
@@ -811,7 +793,7 @@ you need to manually parition your disk drive and specify the mount points</prop
             </child>
           </object>
           <packing>
-            <property name="name">userPage</property>
+            <property name="name">user_page</property>
             <property name="title" translatable="yes">User Configuration</property>
             <property name="position">3</property>
           </packing>
@@ -863,7 +845,7 @@ you need to manually parition your disk drive and specify the mount points</prop
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="onConfirmBackBtnClick" swapped="no"/>
+                    <signal name="clicked" handler="on_confirm_back_btn_click" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -877,7 +859,7 @@ you need to manually parition your disk drive and specify the mount points</prop
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="onConfirmNextBtnClick" swapped="no"/>
+                    <signal name="clicked" handler="on_confirm_next_btn_click" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -964,7 +946,7 @@ you need to manually parition your disk drive and specify the mount points</prop
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="confirmLangLbl">
+                  <object class="GtkLabel" id="confirm_lang_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -974,7 +956,7 @@ you need to manually parition your disk drive and specify the mount points</prop
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="confirmInstallMethodLbl">
+                  <object class="GtkLabel" id="confirm_install_method_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -984,7 +966,7 @@ you need to manually parition your disk drive and specify the mount points</prop
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="confirmUserNameLbl">
+                  <object class="GtkLabel" id="confirm_user_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -994,7 +976,7 @@ you need to manually parition your disk drive and specify the mount points</prop
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="confirmDiskLbl">
+                  <object class="GtkLabel" id="confirm_disk_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -1012,7 +994,7 @@ you need to manually parition your disk drive and specify the mount points</prop
             </child>
           </object>
           <packing>
-            <property name="name">confirmPage</property>
+            <property name="name">confirm_page</property>
             <property name="title" translatable="yes">Confirmation Page</property>
             <property name="position">4</property>
           </packing>
@@ -1054,7 +1036,7 @@ you need to manually parition your disk drive and specify the mount points</prop
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="vteBox">
+              <object class="GtkBox" id="vte_box">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">center</property>
@@ -1073,7 +1055,7 @@ you need to manually parition your disk drive and specify the mount points</prop
             </child>
           </object>
           <packing>
-            <property name="name">instProcPage</property>
+            <property name="name">install_page</property>
             <property name="title" translatable="yes">Installation Process</property>
             <property name="position">5</property>
           </packing>
@@ -1129,7 +1111,7 @@ you need to manually parition your disk drive and specify the mount points</prop
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="onRebootBtnClick" swapped="no"/>
+                    <signal name="clicked" handler="on_reboot_btn_click" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -1147,7 +1129,7 @@ you need to manually parition your disk drive and specify the mount points</prop
             </child>
           </object>
           <packing>
-            <property name="name">donePage</property>
+            <property name="name">done_page</property>
             <property name="title" translatable="yes">Success Page</property>
             <property name="position">6</property>
           </packing>

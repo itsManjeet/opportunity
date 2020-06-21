@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkWindow" id="main_window">
@@ -7,15 +7,6 @@
     <property name="default_width">800</property>
     <property name="default_height">700</property>
     <signal name="destroy" handler="on_destroy" swapped="no"/>
-    <child type="titlebar">
-      <object class="GtkHeaderBar">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="title" translatable="yes">Opportunity</property>
-        <property name="subtitle" translatable="yes">Grab the opportunity to upgrade your potato pc</property>
-        <property name="show_close_button">True</property>
-      </object>
-    </child>
     <child>
       <object class="GtkStack" id="stack_page">
         <property name="visible">True</property>
@@ -1134,6 +1125,15 @@ you need to manually parition your disk drive and specify the mount points</prop
             <property name="position">6</property>
           </packing>
         </child>
+      </object>
+    </child>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="title" translatable="yes">Opportunity</property>
+        <property name="subtitle" translatable="yes">Grab the opportunity to upgrade your potato pc</property>
+        <property name="show_close_button">True</property>
       </object>
     </child>
   </object>
