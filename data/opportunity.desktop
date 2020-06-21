@@ -1,13 +1,10 @@
 [Desktop Entry]
-Type=Application
-Version=0.1
-Name=Opportunity Installer
-Comment=releax os Installer
-Exec=opportunity
-Icon=/usr/share/opportunity/logo.jpg
+Name=opportunity
+Icon=releax system installer
+GenericName=System Installer
+Exec=opportunity %f
+Icon=/usr/share/opportunity/logo.png
 Terminal=false
-Categories=System;
+Categories=GTK;System
 StartupNotify=true
-GenericName=System Installer and Manager
-Path=/
-Name[en_IN.utf8]=Opportunity
+Type=Application
