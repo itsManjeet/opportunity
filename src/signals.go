@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 	"os/exec"
 
 	"github.com/gotk3/gotk3/gtk"
@@ -89,7 +90,7 @@ func onDiskNext() {
 		errbox.Run()
 		errbox.Destroy()
 
-		if exists("/sys/firmware/efi/efivars") {
+		if _, err := os.Stat("/sys/firmware/efi/efivars"); err == nil {
 
 			efiBox := getWidget(builder, "efiBox").(*gtk.Window)
 
