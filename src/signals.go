@@ -84,6 +84,10 @@ func onPartSelect(iconView *gtk.IconView, treePath *gtk.TreePath) {
 func onEfiSelect() {
 	efiCombo := getWidget(builder, "efiCombo").(*gtk.ComboBoxText)
 	installData.efiDir = efiCombo.GetActiveText()
+
+	/* Hide Efi box after Select */
+	efiBox := getWidget(builder, "efiBox").(*gtk.Window)
+	efiBox.Hide()
 }
 func onDiskNext() {
 	if len(installData.rootDisk.Name) <= 0 {
@@ -118,7 +122,7 @@ func onDiskBack() {
 }
 
 func onOpenPart() {
-	err := exec.Command("exo-open", "gparted").Run()
+	err := exec.Command("gparted").Run()
 	checkErr(err)
 
 	loadDisk()
