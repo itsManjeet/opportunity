@@ -35,6 +35,7 @@ type iuserdata struct {
 type idata struct {
 	language string
 	rootDisk BlockDevice
+	disk     string
 	userData iuserdata
 	osID     string
 	efiDir   string
@@ -101,7 +102,6 @@ func main() {
 
 		loadDisk()
 
-		window.Fullscreen()
 		window.Show()
 		application.AddWindow(window)
 	})

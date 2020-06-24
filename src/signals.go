@@ -46,6 +46,7 @@ func onDiskSelect(iconView *gtk.IconView, treePath *gtk.TreePath) {
 	sel, _ := diskListStore.GetValue(iter, 2)
 	diskPath, _ := sel.GetString()
 	//fmt.Println(diskPath)
+	installData.disk = diskPath
 
 	for _, a := range diskData.BlockDevices {
 		if a.Path == diskPath {
@@ -89,22 +90,22 @@ func onDiskNext() {
 		errbox := dialogBox("Please select disk or partition to proceed", gtk.MESSAGE_ERROR)
 		errbox.Run()
 		errbox.Destroy()
-
-		if _, err := os.Stat("/sys/firmware/efi/efivars"); err == nil {
-
-			efiBox := getWidget(builder, "efiBox").(*gtk.Window)
-
-			efiCombo := getWidget(builder, "efiCombo").(*gtk.ComboBoxText)
-			for _, a := range diskData.BlockDevices {
-				for _, j := range a.Children {
-					efiCombo.AppendText(j.Path)
-				}
-			}
-			efiBox.ShowAll()
-		}
 	} else {
 		confirmBox := dialogBox(installData.rootDisk.Name+" is going to wipeout, Please make sure you have not valueable data inside it", gtk.MESSAGE_QUESTION)
 		if confirmBox.Run() == gtk.RESPONSE_OK {
+			if _, err := os.Stat("/sys/firmware/efi/efivars/"); err == nil {
+
+				efiBox := getWidget(builder, "efiBox").(*gtk.Window)
+
+				efiCombo := getWidget(builder, "efiCombo").(*gtk.ComboBoxText)
+				for _, a := range diskData.BlockDevices {
+					for _, j := range a.Children {
+						efiCombo.AppendText(j.Path)
+					}
+				}
+				efiCombo.Show()
+				efiBox.Show()
+			}
 			stackPage.SetVisibleChildName("userDetail")
 		}
 		confirmBox.Destroy()

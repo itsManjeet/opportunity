@@ -8,14 +8,7 @@ pass=$4
 disk=$(mount | grep $work_dir | awk '{print $1}' | sed 's/[0-9]//g')
 efidir=$5
 
-function setup_root {
-    install -d $work_dir/{dev,proc,sys,run}
-    mount --bind /dev $work_dir/dev
-    mount --bind /sys $work_dir/sys
 
-    mount -t proc proc $work_dir/proc
-    mount -t tmpfs tmpfs $work_dir/run
-}
 
 function exec_chroot {
     chroot $work_dir $@

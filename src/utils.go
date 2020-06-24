@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
+	"strings"
 	"unicode"
 
 	"github.com/gotk3/gotk3/glib"
@@ -115,4 +117,13 @@ func checkString(s string) error {
 	}
 
 	return nil
+}
+
+func generatePasswordHash(password string) (string, error) {
+	output, err := exec.Command("openssl", "passwd", "-6", "-salt", "xyz", password).Output()
+	if err != nil {
+		return "", err
+	}
+
+	return strings.TrimSuffix(string(output), "\n"), nil
 }
