@@ -26,4 +26,5 @@ window::__setup_getstart_page()
 {
     __getstart_page.show_all();
     __stack.add(__getstart_page,"getstart_page", "getstart_page");
+    __getstart_page.__get_start.signal_clicked().connect(sigc::mem_fun(*this, &window::on_get_start_click));
 }
