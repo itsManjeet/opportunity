@@ -1,5 +1,6 @@
 #include <namaste/namaste.hh>
 #include <namaste/config.hh>
+#include <sha512.hh>
 
 using namespace namaste;
 
@@ -38,6 +39,20 @@ page::user::user()
 
 
     content.add(__user_grid);
+}
+
+std::string
+page::user::__get_user_id()
+{
+    return __user_entry.get_text();
+}
+
+
+
+std::string
+page::user::__get_enc_passwd()
+{
+    return sw::sha512::calculate(__pass_entry.get_text());
 }
 
 void
