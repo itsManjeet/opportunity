@@ -35,6 +35,9 @@ namespace namaste {
             public:
                 Gtk::Button __next_btn;
                 user();
+
+                std::string __get_user_id();
+                std::string __get_enc_passwd();
         };
 
         class timezone : public ui::page {
@@ -78,6 +81,7 @@ namespace namaste {
             void on_wel_next_click();
             void on_user_next_click();
             void on_timezone_next_click();
+            void on_get_start_click();
 
             void __exit_error(const std::string& err);
 
