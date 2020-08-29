@@ -79,6 +79,8 @@ namespace namaste {
             void on_user_next_click();
             void on_timezone_next_click();
 
+            void __exit_error(const std::string& err);
+
         public:
             window();
     };
