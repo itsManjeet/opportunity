@@ -14,10 +14,12 @@ page::user::user()
     __user_label.set_text("userid");
     __user_label.set_halign(Gtk::ALIGN_START);
     __pass_label.set_text("password");
+    __user_entry.signal_changed().connect(sigc::mem_fun(*this, &user::on_user_text_changed));
     
     __pass_entry.set_visibility(false);
     __pass_entry.set_invisible_char('*');
-    __user_label.set_halign(Gtk::ALIGN_START);
+    __pass_entry.signal_changed().connect(sigc::mem_fun(*this, &user::on_pass_text_changed));
+    __pass_label.set_halign(Gtk::ALIGN_START);
 
     __next_btn.set_image_from_icon_name("dialog-ok-apply",Gtk::ICON_SIZE_BUTTON);
     __next_btn.set_halign(Gtk::ALIGN_CENTER);
@@ -60,6 +62,5 @@ window::__setup_user_page()
 {
     __user_page.show_all();
     __stack.add(__user_page, "user_page","user_page");
-
     __user_page.__next_btn.signal_clicked().connect(sigc::mem_fun(*this, &window::on_user_next_click));
 }

@@ -61,6 +61,6 @@ void
 window::__setup_timezone_page()
 {
     __timezone_page.show_all();
-    __timezone_page.__next_btn.signal_clicked().connect(sigc::mem_fun(*this,&window::on_timezone_next_click));
+    __timezone_page.__timezone_listbox.signal_row_selected().connect(sigc::mem_fun(*this,&window::on_timezone_next_click));
     __stack.add(__timezone_page,"timezone_page","timezone_page");
 }

@@ -34,5 +34,8 @@ namaste::window::window()
 
     set_default_size(1000, 700);
 
+    set_skip_taskbar_hint();
+    set_skip_pager_hint();
+
     //fullscreen();
 }

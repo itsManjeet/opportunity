@@ -31,7 +31,11 @@ namespace namaste {
                 Gtk::Label __user_label, __pass_label;
                 Gtk::Grid __user_grid;
 
-            
+                bool is_user_valid = false, is_pass_valid = false;
+
+                void on_user_text_changed();
+                void on_pass_text_changed();
+
             public:
                 Gtk::Button __next_btn;
                 user();
@@ -44,11 +48,12 @@ namespace namaste {
             protected:
                 Gtk::ScrolledWindow __scroll_window;
                 // Gtk::Viewport __scroll_viewport;
-                Gtk::ListBox __timezone_listbox;
+                
 
             public:
                 timezone();
                 Gtk::Button __next_btn, __back_btn;
+                Gtk::ListBox __timezone_listbox;
         };
 
         class getstart : public ui::page {
@@ -80,7 +85,7 @@ namespace namaste {
 
             void on_wel_next_click();
             void on_user_next_click();
-            void on_timezone_next_click();
+            void on_timezone_next_click(Gtk::ListBoxRow* );
             void on_get_start_click();
 
             void __exit_error(const std::string& err);
