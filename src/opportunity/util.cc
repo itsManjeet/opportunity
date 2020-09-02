@@ -50,3 +50,13 @@ util::diskbtn::diskbtn(const std::string& head, const std::string& sub)
     __box.show_all();
 
 }
+
+
+void
+window::__exit_error(const std::string& err)
+{
+    Gtk::MessageDialog __err_mesg(err);
+    int r = __err_mesg.run();
+
+    this->get_application()->quit();
+}

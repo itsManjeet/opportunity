@@ -159,6 +159,7 @@ namespace opportunity {
             window();
 
             void notify();
+            void __exit_error(const std::string& err);
 
     };
 }

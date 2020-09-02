@@ -47,6 +47,7 @@ util::installer::start(window* caller, data* __install_data)
             __stop = true;
             __error = true;
         }
+        caller->notify();
         return;
     }
 
@@ -62,6 +63,7 @@ util::installer::start(window* caller, data* __install_data)
             __stop = true;
             __error = true;
         }
+        caller->notify();
         
         return;
     }
@@ -87,6 +89,7 @@ util::installer::start(window* caller, data* __install_data)
             __stop = true;
             __error = true;
         }
+        caller->notify();
         return;
     }
 
@@ -115,6 +118,7 @@ util::installer::start(window* caller, data* __install_data)
             __stop = true;
             __error = true;
         }
+        caller->notify();
     }
 
     caller->notify();

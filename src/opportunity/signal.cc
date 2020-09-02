@@ -19,9 +19,8 @@ window::on_lang_select(Gtk::ListBoxRow* r)
         install_data.locale = __l;
 
     } catch (std::length_error e) {
-        io::error(e.what());
+        __exit_error(e.what());
     }
-    
     
 }
 
@@ -133,14 +132,17 @@ void
 window::on_notify_from_installer()
 {
 
-    if (__work_thread && __installer.__stop) {
+    if (__work_thread && (__installer.__stop || __installer.__error)) {
         if (__work_thread->joinable())
             __work_thread->join();
         
         delete __work_thread;
         __work_thread = nullptr;
 
-        stack.set_visible_child("finish_page");
+        if (__installer.__error)
+            __exit_error(__installer.__mesg);
+        else 
+            stack.set_visible_child("finish_page");
     }
 
     update_progress();
