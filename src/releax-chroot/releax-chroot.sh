@@ -21,6 +21,8 @@ function mount_fs {
 
     if [[ $__bootloader_type == "EFI" ]] ; then
         mount --bind /sys/firmware/efi/efivars $__work_dir/sys/firmware/efi/efivars
+        mkdir -pv $__work_dir/boot/efi
+        mount $__ddir $__work_dir/boot/efi
     fi
 }
 
@@ -41,7 +43,7 @@ mount_fs
 if [[ $__bootloader_type == "EFI" ]] ; then
     chroot $__work_dir grub-install --target=x86_64-efi --bootloader-id=releax --recheck &>/dev/null
 else
-    chroot $__work_dir grub-install &>/dev/null
+    chroot $__work_dir grub-install "/dev/$(lsblk -no pkname $__ddir)" &>/dev/null
 fi
 __r=$?
 
@@ -56,4 +58,6 @@ __r=$?
 umount_fs
 
 
-exit __$r
+exit $__r
+
+
