@@ -131,18 +131,23 @@ window::on_install_back_click()
 void
 window::on_notify_from_installer()
 {
+    if (__installer.__error) {
+        if (__work_thread && __work_thread->joinable())
+            __work_thread->join();
+        delete __work_thread;
+        __work_thread = nullptr;
+        __exit_error(__installer.__mesg + "\nCheck Logs for details at /tmp/opportunity.log");
+        return;
+    }
 
-    if (__work_thread && (__installer.__stop || __installer.__error)) {
+    if (__work_thread && __installer.__stop ) {
         if (__work_thread->joinable())
             __work_thread->join();
         
         delete __work_thread;
         __work_thread = nullptr;
 
-        if (__installer.__error)
-            __exit_error(__installer.__mesg);
-        else 
-            stack.set_visible_child("finish_page");
+        stack.set_visible_child("finish_page");
     }
 
     update_progress();
@@ -163,4 +168,10 @@ window::update_progress()
     __installer.get_data(&frac, &mesg);
     install_page.progress_bar.set_fraction(frac);
     install_page.progress_bar.set_text(mesg);
+}
+
+void
+window::on_reboot_btn_click()
+{
+    system(io::sprint("/sbin/reboot &").c_str());
 }

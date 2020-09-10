@@ -3,11 +3,11 @@
 
 #include "ver.hh"
 
-#define __CONFIG_DIR "data/config/"
-#define __DATA_DIR__ "data/resource/"
-#define __LOCALE_DIR "build/locale/"
+#define __CONFIG_DIR "/etc/"
+#define __DATA_DIR__ "/usr/share/opportunity/"
+#define __LOCALE_DIR "/usr/share/locale/"
 #define __WORK_DIR__ "/tmp/work-dir/"
-#define __SQUA_IMAGE__ "data/rootfs.img"
+#define __SQUA_IMAGE__ "/run/initramfs/medium/iso.squa"
 
 #define __APP_ID__ "in.releax.opportunity"
 #define __APP_ABOUT__ "releax os system installer"

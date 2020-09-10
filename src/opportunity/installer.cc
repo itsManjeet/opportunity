@@ -1,5 +1,8 @@
 #include <opportunity.hh>
 #include <sys/mount.h>
+#include <chrono>
+#include <future>
+
 
 using namespace opportunity;
 
@@ -21,124 +24,125 @@ util::installer::stop()
 }
 
 void
-util::installer::start(window* caller, data* __install_data)
+util::installer::run(data* __install_data, window* caller)
 {
     {
-        std::lock_guard<std::mutex> lock(__mutex);
-        __progress = 0.0;
-        __mesg = "initalizing";
+        LOCK_GUARD(__mutex);
+        __progress = 0.1;
+        __mesg = "Initializing Installer";
     }
 
-  
+    io::info("Formating System");
+    int ret = WEXITSTATUS(system(io::sprint("/sbin/mkfs.ext4 -F ", __install_data->root_disk).c_str()));
+    if (ret) {
+        {
+            io::info("Error while formating system");
+            LOCK_GUARD(__mutex);
+            __mesg = "Failed to format root device";
+            __error = true;
+            __stop = true;
+        }
+        return;
+    }
+
     {
         LOCK_GUARD(__mutex);
         __progress = 0.2;
-        __mesg = io::sprint(__progress * 100, "% preparing disk");
+        __mesg = "preparing work dir";
     }
-
-    caller->notify();
-
-    int ret = system(io::sprint("mkfs.ext4 -F ", __install_data->root_disk).c_str());
-    if (WEXITSTATUS(ret)) {
-        {
-            LOCK_GUARD(__mutex);
-            __mesg = io::sprint("failed to prepare disk ", __install_data->root_disk);
-            io::error(__mesg);
-            __stop = true;
-            __error = true;
-        }
-        caller->notify();
-        return;
-    }
-
-    caller->notify();
 
     fs::makedir(__WORK_DIR__);
-    ret = mount(io::sprint(__install_data->root_disk).c_str(), __WORK_DIR__ ,"ext4",0, "");
+    io::info("mounting device");
+
+    ret = WEXITSTATUS(system(io::sprint("mount ",__install_data->root_disk, " ", __WORK_DIR__).c_str()));
     if (ret) {
         {
+            io::info("Error while extract system");
             LOCK_GUARD(__mutex);
-            __mesg = io::sprint("failed to mount disk ", __install_data->root_disk);
-            io::error(__mesg);
-            __stop = true;
+            __mesg = "Failed to extract system";
             __error = true;
+            __stop = true;
         }
-        caller->notify();
-        
         return;
     }
-    
-
-        caller->notify();
 
     {
         LOCK_GUARD(__mutex);
         __progress = 0.5;
-        __mesg = io::sprint(__progress * 100, "% install system into ",__install_data->root_disk);
-
+        __mesg = "Extracting system into roots [may take upto 20min]";
     }
-        
-    caller->notify();
 
-    ret = system(io::sprint("unsquashfs -f -d ", __WORK_DIR__ , " ", __SQUA_IMAGE__ ).c_str());
-    if (WEXITSTATUS(ret)) {
+    io::info("unsquashing image");
+    ret = WEXITSTATUS(system(io::sprint("unsquashfs -f -d ",__WORK_DIR__, " " , __SQUA_IMAGE__).c_str()));
+    if (ret) {
         {
+            io::info("Error while extract system");
             LOCK_GUARD(__mutex);
-            __mesg = io::sprint("failed to install ", __install_data->root_disk, " ", __SQUA_IMAGE__);
-            io::error(__mesg);
-            __stop = true;
+            __mesg = "Failed to extract system";
             __error = true;
+            __stop = true;
         }
-        caller->notify();
         return;
     }
 
-    
     {
         LOCK_GUARD(__mutex);
         __progress = 0.8;
-        __mesg = io::sprint(__progress * 100, "% install bootloader ",__install_data->root_disk);
-        __error = true;
-
+        __mesg = "Installing Bootloader";
     }
-    
 
-    caller->notify();
+    io::info("installing bootloader");
+    std::string __bootloader_type = "LEGACY";
+    std::string __ddir = __install_data->root_disk;
+    if (__install_data->efi) {
+        __bootloader_type = "EFI";
+        __ddir = __install_data->efi_disk;
+    }
 
-    if (__install_data->efi)
-        ret = system(io::sprint("releax-chroot ",__WORK_DIR__, " EFI ", __install_data->efi_disk).c_str());
-    else
-        ret = system(io::sprint("releax-chroot ", __WORK_DIR__, " LEGACY ", __install_data->root_disk).c_str());
-    
-    if (WEXITSTATUS(ret)) {
+    ret = WEXITSTATUS(system(io::sprint("releax-chroot ", __WORK_DIR__, " ", __bootloader_type, " ", __ddir).c_str()));
+    if (ret) {
         {
+            io::info("Error while installing bootloader");
             LOCK_GUARD(__mutex);
-            __mesg = io::sprint("failed to install bootloader ", __install_data->efi);
-            io::error(__mesg);
-            __stop = true;
+            __mesg = "Failed to installed bootloader";
             __error = true;
-        }
-        caller->notify();
-    }
-
-    caller->notify();
-    
-    
-    ret = system(io::sprint("umount ", __WORK_DIR__).c_str());
-    if (WEXITSTATUS(ret)) {
-        {
-            LOCK_GUARD(__mutex);
-            __mesg = io::sprint("failed to cleanup system");
-            io::error(__mesg);
             __stop = true;
-            __error = true;
         }
+        return;
     }
-
-    caller->notify();
 
     {
         LOCK_GUARD(__mutex);
         __error = false;
+        __stop = true;
     }
+}
+
+void
+util::installer::start(window* caller, data* __install_data)
+{
+    {
+        LOCK_GUARD(__mutex);
+        __error = false;
+        __stop = false;
+    }
+
+    std::thread __runner(
+        &installer::run, this, __install_data, caller
+    );
+
+
+    while(true) {
+        caller->notify();
+        if (__error || __stop) {
+            io::info("Breaking loop");
+            break;
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(20));
+    }
+    __runner.join();
+    std::this_thread::sleep_for(std::chrono::milliseconds(120));
+    
+
+    io::info("Thread run successfully");
 }

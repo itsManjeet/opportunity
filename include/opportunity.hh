@@ -51,7 +51,8 @@ namespace opportunity {
                 mutable std::mutex __mutex;
                 
                 data* __d;
-            
+
+                void run(data* __install_data, window* );
             public:
                 installer() : __mutex(),
                     __mesg(), __progress(0.0) {}
@@ -60,9 +61,10 @@ namespace opportunity {
                 void start(window*, data*);
                 void stop();
                 bool __stop = false;
-                bool __error = true;
+                bool __error = false;
                 double __progress;
                 std::string __mesg;
+
 
                 void get_data(double*, std::string*) const;
         };
@@ -151,6 +153,8 @@ namespace opportunity {
 
             void on_install_btn_click();
             void on_install_back_click();
+
+            void on_reboot_btn_click();
 
             void on_notify_from_installer();
             void update_progress();

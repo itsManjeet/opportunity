@@ -11,6 +11,9 @@ page::disk::disk() {
             // Skip disk devices
             if (!isdigit(a.name()[a.name().length() - 1])) continue;
 
+            // Skipp loop devices
+            if (a.name().find("loop") != std::string::npos) continue;
+            
             auto __size = std::strtol(fs::read(io::sprint("/sys/class/block/",a.name(),"/size")).c_str(),0,10);
             auto d = new util::diskbtn(a.name(), util::humanify_size(__size));
             d->show_all();

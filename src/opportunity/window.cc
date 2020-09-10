@@ -54,8 +54,8 @@ window::setup_welcome_screen()
     r_welc_label.set_text("releax os");
     r_welc_sub_label.set_text(_T("click 'continue' to enter the world of opensource"));
 
-    r_welc_label.override_font(Pango::FontDescription("Sans Light 20"));
-    r_welc_sub_label.override_font(Pango::FontDescription("Sans Light 12"));
+    r_welc_label.override_font(Pango::FontDescription("Open Sans Light 20"));
+    r_welc_sub_label.override_font(Pango::FontDescription("Open Sans Light 12"));
     
     r_cont_btn.set_margin_top(50);
     r_cont_btn.set_image_from_icon_name("next",Gtk::ICON_SIZE_BUTTON);

@@ -21,6 +21,6 @@ void
 window::setup_finish_page()
 {
     finish_page.show_all();
-
+    finish_page.reboot.signal_clicked().connect(sigc::mem_fun(*this, &window::on_reboot_btn_click));
     stack.add(finish_page, "finish_page","finish_page");
 }
